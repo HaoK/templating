@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -168,7 +168,7 @@ namespace Microsoft.TemplateEngine.Orchestrator.RunnableProjects
             return templateList;
         }
 
-        public bool TryGetTemplateFromConfigInfo(IFileSystemInfo templateFileConfig, out ITemplate template, IFileSystemInfo localeFileConfig = null, IFile hostTemplateConfigFile = null)
+        public bool TryGetTemplateFromConfigInfo(IFileSystemInfo templateFileConfig, out ITemplate template, IFileSystemInfo localeFileConfig = null, IFile hostTemplateConfigFile = null, string baselineName = null)
         {
             IFile templateFile = templateFileConfig as IFile;
 
@@ -191,7 +191,11 @@ namespace Microsoft.TemplateEngine.Orchestrator.RunnableProjects
                     localeSourceObject = ReadJObjectFromIFile(localeFile);
                 }
 
-                SimpleConfigModel templateModel = SimpleConfigModel.FromJObject(templateFile.MountPoint.EnvironmentSettings, srcObject, localeSourceObject);
+                ISimpleConfigModifiers configModifiers = new SimpleConfigModifiers()
+                {
+                    BaselineName = baselineName
+                };
+                SimpleConfigModel templateModel = SimpleConfigModel.FromJObject(templateFile.MountPoint.EnvironmentSettings, srcObject, configModifiers, localeSourceObject);
 
                 if (!CheckGeneratorVersionRequiredByTemplate(templateModel.GeneratorVersions))
                 {   // template isn't compatible with this generator version
@@ -384,7 +388,8 @@ namespace Microsoft.TemplateEngine.Orchestrator.RunnableProjects
                     return convertedFloat;
                 }
             }
-            else if (string.Equals(param.DataType, "int", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(param.DataType, "int", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(param.DataType, "integer", StringComparison.OrdinalIgnoreCase))
             {
                 if (long.TryParse(literal, out long convertedInt))
                 {
@@ -418,7 +423,8 @@ namespace Microsoft.TemplateEngine.Orchestrator.RunnableProjects
                     return convertedHex;
                 }
             }
-            else if (string.Equals(param.DataType, "text", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(param.DataType, "text", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(param.DataType, "string", StringComparison.OrdinalIgnoreCase))
             {   // "text" is a valid data type, but doesn't need any special handling.
                 return literal;
             }

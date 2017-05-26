@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -202,6 +202,8 @@ namespace Microsoft.TemplateEngine.Cli.CommandParsing
         public bool ShowAliasesSpecified => _parseResult.HasAppliedOption(new[] { _commandName, "show-alias" });
 
         public string ShowAliasesAliasName => _parseResult.GetArgumentValueAtPath(new[] { _commandName, "show-alias" });
+
+        public string BaselineName => _parseResult.GetArgumentValueAtPath(new[] { _commandName, "baseline" });
 
         public IList<string> ExtraArgsFileNames => _parseResult.GetArgumentListAtPath(new[] { _commandName, "extra-args" }).ToList();
 

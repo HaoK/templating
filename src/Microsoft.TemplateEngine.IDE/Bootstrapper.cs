@@ -85,10 +85,28 @@ namespace Microsoft.TemplateEngine.IDE
             return ((SettingsLoader)EnvironmentSettings.SettingsLoader).UserTemplateCache.List(exactMatchesOnly, filters);
         }
 
-        public async Task<ICreationResult> CreateAsync(ITemplateInfo info, string name, string outputPath, IReadOnlyDictionary<string, string> parameters, bool skipUpdateCheck)
+        public async Task<ICreationResult> CreateAsync(ITemplateInfo info, string name, string outputPath, IReadOnlyDictionary<string, string> parameters, bool skipUpdateCheck, string baselineName)
         {
-            TemplateCreationResult instantiateResult = await _templateCreator.InstantiateAsync(info, name, name, outputPath, parameters, skipUpdateCheck, forceCreation: false).ConfigureAwait(false);
+            TemplateCreationResult instantiateResult = await _templateCreator.InstantiateAsync(info, name, name, outputPath, parameters, skipUpdateCheck, forceCreation: false, baselineName: baselineName).ConfigureAwait(false);
             return instantiateResult.ResultInfo;
+        }
+
+        public IEnumerable<string>  Uninstall(string path)
+        {
+            EnsureInitialized();
+            return Installer.Uninstall(new[] { path });
+        }
+
+        public IEnumerable<string>  Uninstall(params string[] paths)
+        {
+            EnsureInitialized();
+            return Installer.Uninstall(paths);
+        }
+
+        public IEnumerable<string>  Uninstall(IEnumerable<string> paths)
+        {
+            EnsureInitialized();
+            return Installer.Uninstall(paths);
         }
     }
 }

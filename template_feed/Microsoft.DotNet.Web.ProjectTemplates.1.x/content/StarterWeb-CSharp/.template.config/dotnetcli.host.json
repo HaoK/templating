@@ -1,4 +1,5 @@
 {
+  "$schema": "http://json.schemastore.org/dotnetcli.host",
   "symbolInfo": {
     "TargetFrameworkOverride": {
       "isHidden": "true",
@@ -13,7 +14,7 @@
     },
     "AADInstance": {
       "longName": "aad-instance",
-      "shortName": "s"
+      "shortName": ""
     },
     "OrgReadAccess": {
       "longName": "org-read-access",
@@ -56,9 +57,13 @@
     },
     "UserSecretsId": {
       "isHidden": true
+    },
+    "UseBrowserLink": {
+      "longName": "use-browser-link",
+      "shortName": ""
     }
   },
-  "UsageExamples": [
+  "usageExamples": [
     "--framework netcoreapp1.1 --auth Individual"
   ]
 }
